@@ -1,5 +1,6 @@
 // @ts-check
 
+require("dotenv").config();
 const { MongoClient } = require("mongodb");
 
 /**
@@ -10,7 +11,8 @@ let dbConnection;
 module.exports = {
 	// @ts-ignore
 	connectToDb: (cb) => {
-		MongoClient.connect("mongodb://localhost:27017/peerstore")
+		// @ts-ignore
+		MongoClient.connect(process.env.CONNECTION_STRING)
 			.then((client) => {
 				dbConnection = client.db();
 				return cb();
