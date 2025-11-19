@@ -1,36 +1,17 @@
 const express = require("express");
-const router = express.Router();
 const { ObjectId } = require("mongodb");
-const { connectToDb, getDb } = require("../db");
+const router = express.Router();
 
-const collection = "rooms";
-
-/**
- * @type {import("mongodb").Db}
- */
-let db;
-
-connectToDb((/** @type {any} */ err) => {
-	if (!err) {
-		db = getDb();
-	}
-});
-
-router.use("/", (req, res, next) => {
-	/*
-        #swagger.tags = ['Rooms']
-   */
-
-	next();
-});
+const Room = require("../models/room");
+const authController = require("../middleware/is-auth");
 
 router.get("/", (req, res) => {
+	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Fetches the entire list of rooms available'
 
 	const rooms = [];
 
-	db.collection(collection)
-		.find()
+	Room.find()
 		.forEach((room) => rooms.push(room))
 		.then(() => {
 			res.status(200).json(rooms);
@@ -41,11 +22,11 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
+	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Fetch a room by id'
 
 	if (ObjectId.isValid(req.params.id)) {
-		db.collection(collection)
-			.findOne({ _id: new ObjectId(req.params.id) })
+		Room.findOne({ _id: new ObjectId(req.params.id) })
 			.then((doc) => {
 				res.status(200).json(doc);
 			})
@@ -58,6 +39,7 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
+	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Create a room'
 
 	/* #swagger.parameters['body'] = {
@@ -67,19 +49,21 @@ router.post("/", (req, res) => {
             schema: { $ref: '#/definitions/Room' }
     }  */
 
-	const room = req.body;
+	// #swagger.security = [{"userToken": []}]
 
-	db.collection(collection)
-		.insertOne(room)
+	const room = new Room(req.body);
+
+	room.save()
 		.then((result) => {
 			res.status(201).json(result);
 		})
 		.catch((err) => {
-			res.status(500).json({ err: "Could not create a new document" });
+			res.status(500).json({ err: err });
 		});
 });
 
-router.patch("/:id/join/:user", async (req, res) => {
+router.post("/:id/join", authController, (req, res) => {
+	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Make the specified User join the referenced room'
 
 	/* #swagger.parameters['id'] = {
@@ -87,17 +71,13 @@ router.patch("/:id/join/:user", async (req, res) => {
 		required: true
 	}	*/
 
-	/* #swagger.parameters['user'] = {
-		description: 'User Id',
-		required: true
-	}	*/
+	// #swagger.security = [{"userToken": []}]
 
 	if (ObjectId.isValid(req.params.id)) {
-		db.collection(collection)
-			.updateOne(
-				{ _id: new ObjectId(req.params.id) },
-				{ $addToSet: { users: req.params.user } },
-			)
+		Room.updateOne(
+			{ _id: new ObjectId(req.params.id) },
+			{ $addToSet: { users: req.uid } },
+		)
 			.then((result) => {
 				res.status(201).json(result);
 			})
@@ -110,27 +90,22 @@ router.patch("/:id/join/:user", async (req, res) => {
 	}
 });
 
-router.patch("/:id/quit/:user", (req, res) => {
+router.post("/:id/quit", authController, (req, res) => {
+	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Make the specified User quit the referenced room'
 
 	/* #swagger.parameters['id'] = {
-		in: 'query',
 		description: 'Room Id',
 		required: true
 	}	*/
 
-	/* #swagger.parameters['userId'] = {
-		in: 'query',
-		description: 'User Id',
-		required: true
-	}	*/
+	// #swagger.security = [{"userToken": []}]
 
 	if (ObjectId.isValid(req.params.id)) {
-		db.collection(collection)
-			.updateOne(
-				{ _id: new ObjectId(req.params.id) },
-				{ $pull: { users: req.params.user } },
-			)
+		Room.updateOne(
+			{ _id: new ObjectId(req.params.id) },
+			{ $pull: { users: req.uid } },
+		)
 			.then((result) => {
 				res.status(201).json(result);
 			})
@@ -144,11 +119,13 @@ router.patch("/:id/quit/:user", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
+	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Delete a room by id'
 
+	// #swagger.security = [{"userToken": []}]
+
 	if (ObjectId.isValid(req.params.id)) {
-		db.collection(collection)
-			.deleteOne({ _id: new ObjectId(req.params.id) })
+		Room.deleteOne({ _id: new ObjectId(req.params.id) })
 			.then((result) => {
 				res.status(200).json(result);
 			})
@@ -162,19 +139,43 @@ router.delete("/:id", (req, res) => {
 	}
 });
 
-router.put("/:id", (req, res) => {
+router.patch("/:id", (req, res) => {
+	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Replace a room by id'
+
+	// #swagger.security = [{"userToken": []}]
 
 	const updates = req.body;
 	if (ObjectId.isValid(req.params.id)) {
-		db.collection(collection)
-			.updateOne({ _id: new ObjectId(req.params.id) }, { $set: updates })
+		Room.updateOne({ _id: new ObjectId(req.params.id) }, { $set: updates })
 			.then((result) => {
 				res.status(200).json(result);
 			})
 			.catch((err) => {
 				res.status(500).json({
 					error: "Could not update the document",
+				});
+			});
+	} else {
+		res.status(500).json({ error: "Not a valid document id" });
+	}
+});
+
+router.put("/:id", (req, res) => {
+	// #swagger.tags = ['Rooms']
+	// #swagger.description = 'Replace a room by id'
+
+	// #swagger.security = [{"userToken": []}]
+
+	const updates = req.body;
+	if (ObjectId.isValid(req.params.id)) {
+		Room.replaceOne({ _id: new ObjectId(req.params.id) }, { $set: updates })
+			.then((result) => {
+				res.status(200).json(result);
+			})
+			.catch((err) => {
+				res.status(500).json({
+					error: "Could not replace the document",
 				});
 			});
 	} else {
