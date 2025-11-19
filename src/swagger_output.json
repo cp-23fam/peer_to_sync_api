@@ -31,17 +31,6 @@
           "Rooms"
         ],
         "description": "Create a room",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "New Room",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Room"
-            }
-          }
-        ],
         "responses": {
           "201": {
             "description": "Created"
@@ -54,7 +43,30 @@
           {
             "userToken": []
           }
-        ]
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "any"
+                  },
+                  "hostId": {
+                    "example": "any"
+                  },
+                  "maxPlayers": {
+                    "example": "any"
+                  },
+                  "type": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/rooms/{id}": {

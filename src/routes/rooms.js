@@ -1,20 +1,17 @@
 const express = require("express");
-const { ObjectId } = require("mongodb");
+const { ObjectId } = require("mongoose").Types;
 const router = express.Router();
 
 const Room = require("../models/room");
-const authController = require("../middleware/is-auth");
+const authMiddleware = require("../middleware/is-auth");
 
 router.get("/", (req, res) => {
 	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Fetches the entire list of rooms available'
 
-	const rooms = [];
-
 	Room.find()
-		.forEach((room) => rooms.push(room))
-		.then(() => {
-			res.status(200).json(rooms);
+		.then((result) => {
+			res.status(200).json(result);
 		})
 		.catch(() => {
 			res.status(500).json({ error: "Could not fetch the documents" });
@@ -31,7 +28,7 @@ router.get("/:id", (req, res) => {
 				res.status(200).json(doc);
 			})
 			.catch((err) => {
-				res.status(500).json({ error: "Could not fetch the document" });
+				res.status(500).json({ error: err });
 			});
 	} else {
 		res.status(500).json({ error: "Not a valid document id" });
@@ -42,16 +39,16 @@ router.post("/", (req, res) => {
 	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Create a room'
 
-	/* #swagger.parameters['body'] = {
-            in: 'body',
-            description: 'New Room',
-            required: true,
-            schema: { $ref: '#/definitions/Room' }
-    }  */
-
 	// #swagger.security = [{"userToken": []}]
 
-	const room = new Room(req.body);
+	const room = new Room({
+		name: req.body.name,
+		hostId: req.body.hostId,
+		users: [req.body.hostId],
+		status: "creating",
+		maxPlayers: Number(req.body.maxPlayers),
+		type: req.body.type,
+	});
 
 	room.save()
 		.then((result) => {
@@ -62,7 +59,7 @@ router.post("/", (req, res) => {
 		});
 });
 
-router.post("/:id/join", authController, (req, res) => {
+router.post("/:id/join", authMiddleware, (req, res) => {
 	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Make the specified User join the referenced room'
 
@@ -90,7 +87,7 @@ router.post("/:id/join", authController, (req, res) => {
 	}
 });
 
-router.post("/:id/quit", authController, (req, res) => {
+router.post("/:id/quit", authMiddleware, (req, res) => {
 	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Make the specified User quit the referenced room'
 

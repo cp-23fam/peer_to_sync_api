@@ -3,15 +3,8 @@ const { body } = require("express-validator");
 const router = express.Router();
 
 const User = require("../models/user");
-const authController = require("../controllers/auth");
-
-router.use("/", (req, res, next) => {
-	/*
-        #swagger.tags = ['Users']
-   */
-
-	next();
-});
+const userController = require("../controllers/user");
+const authMiddleware = require("../middleware/is-auth");
 
 router.post(
 	// #swagger.tags = ['Users']
@@ -24,7 +17,7 @@ router.post(
 
 	"/login",
 
-	authController.login,
+	userController.login,
 );
 
 router.put(
@@ -50,7 +43,7 @@ router.put(
 			})
 			.normalizeEmail(),
 	],
-	authController.signup,
+	userController.signup,
 );
 
 module.exports = router;
