@@ -3,7 +3,7 @@ const { ObjectId } = require("mongoose").Types;
 const router = express.Router();
 
 const Room = require("../models/room");
-const authMiddleware = require("../middleware/is-auth");
+const auth = require("../middleware/is-auth");
 
 router.get("/", (req, res) => {
 	// #swagger.tags = ['Rooms']
@@ -35,7 +35,7 @@ router.get("/:id", (req, res) => {
 	}
 });
 
-router.post("/", (req, res) => {
+router.post("/", auth.logged, (req, res) => {
 	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Create a room'
 
@@ -59,7 +59,7 @@ router.post("/", (req, res) => {
 		});
 });
 
-router.post("/:id/join", authMiddleware, (req, res) => {
+router.post("/:id/join", auth.logged, (req, res) => {
 	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Make the specified User join the referenced room'
 
@@ -87,7 +87,7 @@ router.post("/:id/join", authMiddleware, (req, res) => {
 	}
 });
 
-router.post("/:id/quit", authMiddleware, (req, res) => {
+router.post("/:id/quit", auth.logged, (req, res) => {
 	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Make the specified User quit the referenced room'
 

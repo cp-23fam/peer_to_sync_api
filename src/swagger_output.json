@@ -252,22 +252,33 @@
         ]
       }
     },
+    "/user/": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get current user infos",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
     "/user/login": {
       "post": {
         "tags": [
           "Users"
         ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Login"
-            }
-          }
-        ],
+        "description": "Log in",
         "responses": {
           "200": {
             "description": "OK"
@@ -298,17 +309,6 @@
           "Users"
         ],
         "description": "Create a user",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "New User",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/User"
-            }
-          }
-        ],
         "responses": {
           "201": {
             "description": "Created"

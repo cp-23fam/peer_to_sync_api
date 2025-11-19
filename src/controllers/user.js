@@ -89,3 +89,17 @@ exports.login = (req, res, next) => {
 			next(err);
 		});
 };
+
+exports.infos = (req, res, next) => {
+	User.findOne({ _id: req.uid })
+		.then((doc) => {
+			res.status(200).json({
+				_id: doc._id,
+				email: doc.email,
+				username: doc.username,
+			});
+		})
+		.catch((err) => {
+			res.status(500).json(err);
+		});
+};

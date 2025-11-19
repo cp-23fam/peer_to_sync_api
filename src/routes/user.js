@@ -4,16 +4,21 @@ const router = express.Router();
 
 const User = require("../models/user");
 const userController = require("../controllers/user");
-const authMiddleware = require("../middleware/is-auth");
+const auth = require("../middleware/is-auth");
+
+router.get(
+	// #swagger.tags = ['Users']
+	// #swagger.description = 'Get current user infos'
+
+	// #swagger.security = [{"userToken": []}]
+	"/",
+	auth.logged,
+	userController.infos,
+);
 
 router.post(
 	// #swagger.tags = ['Users']
-
-	/* #swagger.parameters['body'] = {
-            in: 'body',
-            required: true,
-			schema: { $ref: '#/definitions/Login' }
-    }  */
+	// #swagger.description = 'Log in'
 
 	"/login",
 
@@ -23,13 +28,6 @@ router.post(
 router.put(
 	// #swagger.tags = ['Users']
 	// #swagger.description = 'Create a user'
-
-	/* #swagger.parameters['body'] = {
-            in: 'body',
-            description: 'New User',
-            required: true,
-            schema: { $ref: '#/definitions/User' }
-    }  */
 
 	"/signup",
 	[
