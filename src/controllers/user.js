@@ -97,6 +97,21 @@ exports.infos = (req, res, next) => {
 				_id: doc._id,
 				email: doc.email,
 				username: doc.username,
+				imageUrl: doc.imageUrl,
+			});
+		})
+		.catch((err) => {
+			res.status(500).json(err);
+		});
+};
+
+exports.getUser = (req, res, next) => {
+	User.findOne({ _id: req.params.id })
+		.then((doc) => {
+			res.status(200).json({
+				_id: doc._id,
+				username: doc.username,
+				imageUrl: doc.imageUrl,
 			});
 		})
 		.catch((err) => {

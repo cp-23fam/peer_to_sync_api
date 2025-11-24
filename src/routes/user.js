@@ -16,6 +16,16 @@ router.get(
 	userController.infos,
 );
 
+router.get(
+	// #swagger.tags = ['Users']
+	// #swagger.description = 'Get current user infos'
+
+	// #swagger.security = [{"userToken": []}]
+	"/:id",
+	auth.logged,
+	userController.getUser,
+);
+
 router.post(
 	// #swagger.tags = ['Users']
 	// #swagger.description = 'Log in'
