@@ -25,7 +25,7 @@ router.post(
 	userController.login,
 );
 
-router.put(
+router.post(
 	// #swagger.tags = ['Users']
 	// #swagger.description = 'Create a user'
 

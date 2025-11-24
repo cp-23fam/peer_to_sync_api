@@ -54,7 +54,7 @@ exports.login = (req, res, next) => {
 	User.findOne({ email: email })
 		.then((user) => {
 			if (!user) {
-				const error = new Error("Unknown user");
+				const error = new Error("Unknown email");
 				error.statusCode = 401;
 				throw error;
 			}

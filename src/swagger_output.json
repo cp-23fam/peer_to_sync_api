@@ -304,7 +304,7 @@
       }
     },
     "/user/signup": {
-      "put": {
+      "post": {
         "tags": [
           "Users"
         ],
