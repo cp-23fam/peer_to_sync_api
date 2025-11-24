@@ -76,7 +76,7 @@ router.post("/:id/join", auth.logged, (req, res) => {
 			{ $addToSet: { users: req.uid } },
 		)
 			.then((result) => {
-				res.status(201).json(result);
+				res.status(200).json(result);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -104,7 +104,7 @@ router.post("/:id/quit", auth.logged, (req, res) => {
 			{ $pull: { users: req.uid } },
 		)
 			.then((result) => {
-				res.status(201).json(result);
+				res.status(200).json(result);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -124,7 +124,7 @@ router.delete("/:id", (req, res) => {
 	if (ObjectId.isValid(req.params.id)) {
 		Room.deleteOne({ _id: new ObjectId(req.params.id) })
 			.then((result) => {
-				res.status(200).json(result);
+				res.status(204).json(result);
 			})
 			.catch((err) => {
 				res.status(500).json({
