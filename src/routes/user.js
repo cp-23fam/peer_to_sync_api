@@ -4,7 +4,7 @@ const router = express.Router();
 
 const User = require("../models/user");
 const userController = require("../controllers/user");
-const auth = require("../middleware/is-auth");
+const auth = require("../middleware/auth");
 
 router.get(
 	// #swagger.tags = ['Users']

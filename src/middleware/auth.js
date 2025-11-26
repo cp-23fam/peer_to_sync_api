@@ -1,4 +1,6 @@
 const jwt = require("jsonwebtoken");
+const Room = require("../models/room");
+const { ObjectId } = require("mongoose").Types;
 
 exports.logged = (req, res, next) => {
 	const authHeader = req.get("Authorization");
@@ -26,5 +28,17 @@ exports.logged = (req, res, next) => {
 	}
 
 	req.uid = decodedToken.sub;
+	next();
+};
+
+exports.isHost = async (req, res, next) => {
+	const room = await Room.findOne({ _id: new ObjectId(req.params.id) });
+
+	if (room.hostId != req.uid) {
+		const error = new Error("Your're not the host of the room");
+		error.statusCode = 401;
+		throw error;
+	}
+
 	next();
 };

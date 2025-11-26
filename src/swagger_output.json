@@ -206,6 +206,9 @@
           "400": {
             "description": "Bad Request"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -222,6 +225,41 @@
         "tags": [
           "Rooms"
         ],
+        "description": "Make the User quit the referenced room",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Room Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/rooms/{id}/kick/{uid}": {
+      "post": {
+        "tags": [
+          "Rooms"
+        ],
         "description": "Make the specified User quit the referenced room",
         "parameters": [
           {
@@ -232,6 +270,14 @@
               "type": "string"
             },
             "description": "Room Id"
+          },
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {

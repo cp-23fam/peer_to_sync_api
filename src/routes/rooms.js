@@ -1,9 +1,9 @@
 const express = require("express");
-const { ObjectId } = require("mongoose").Types;
+const { ObjectId, Types } = require("mongoose").Types;
 const router = express.Router();
 
 const Room = require("../models/room");
-const auth = require("../middleware/is-auth");
+const auth = require("../middleware/auth");
 
 router.get("/", (req, res) => {
 	// #swagger.tags = ['Rooms']
@@ -45,7 +45,7 @@ router.post("/", auth.logged, (req, res) => {
 		name: req.body.name,
 		hostId: req.body.hostId,
 		users: [req.body.hostId],
-		status: "creating",
+		status: "waiting",
 		maxPlayers: Number(req.body.maxPlayers),
 		type: req.body.type,
 	});
@@ -59,7 +59,7 @@ router.post("/", auth.logged, (req, res) => {
 		});
 });
 
-router.post("/:id/join", auth.logged, (req, res) => {
+router.post("/:id/join", auth.logged, async (req, res) => {
 	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Make the specified User join the referenced room'
 
@@ -71,17 +71,24 @@ router.post("/:id/join", auth.logged, (req, res) => {
 	// #swagger.security = [{"userToken": []}]
 
 	if (ObjectId.isValid(req.params.id)) {
-		Room.updateOne(
+		const room = await Room.findOne({
+			_id: new ObjectId(req.params.id),
+		});
+
+		if (room.users.length == room.maxPlayers) {
+			res.status(403).json({ error: "Room is full" });
+			return;
+		}
+
+		const result = await Room.updateOne(
 			{ _id: new ObjectId(req.params.id) },
 			{ $addToSet: { users: req.uid } },
-		)
-			.then((result) => {
-				res.status(200).json(result);
-			})
-			.catch((err) => {
-				console.log(err);
-				res.status(500).json({ error: "User could not join room" });
-			});
+		).catch((err) => {
+			console.log(err);
+			res.status(500).json({ error: "User could not join room" });
+		});
+
+		res.status(200).json(result);
 	} else {
 		res.status(400).json({ error: "Not a valid document id" });
 	}
@@ -89,7 +96,7 @@ router.post("/:id/join", auth.logged, (req, res) => {
 
 router.post("/:id/quit", auth.logged, (req, res) => {
 	// #swagger.tags = ['Rooms']
-	// #swagger.description = 'Make the specified User quit the referenced room'
+	// #swagger.description = 'Make the User quit the referenced room'
 
 	/* #swagger.parameters['id'] = {
 		description: 'Room Id',
@@ -115,7 +122,37 @@ router.post("/:id/quit", auth.logged, (req, res) => {
 	}
 });
 
-router.delete("/:id", (req, res) => {
+router.post("/:id/kick/:uid", auth.logged, auth.isHost, (req, res) => {
+	// #swagger.tags = ['Rooms']
+	// #swagger.description = 'Make the specified User quit the referenced room'
+
+	/* #swagger.parameters['id'] = {
+		description: 'Room Id',
+		required: true
+	}	*/
+
+	// #swagger.security = [{"userToken": []}]
+
+	if (ObjectId.isValid(req.params.id)) {
+		Room.updateOne(
+			{ _id: new ObjectId(req.params.id) },
+			{ $pull: { users: req.params.uid } },
+		)
+			.then((result) => {
+				res.status(200).json(result);
+			})
+			.catch((err) => {
+				console.log(err);
+				res.status(500).json({
+					error: "User could not get kicked from room",
+				});
+			});
+	} else {
+		res.status(400).json({ error: "Not a valid document id" });
+	}
+});
+
+router.delete("/:id", auth.logged, auth.isHost, (req, res) => {
 	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Delete a room by id'
 
