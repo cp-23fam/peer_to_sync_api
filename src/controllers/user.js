@@ -25,6 +25,8 @@ exports.signup = (req, res, next) => {
 				username: username,
 				password: hashedPwd,
 				imageUrl: imageUrl,
+				friends: [],
+				pending: [],
 			});
 
 			return user.save();
@@ -98,6 +100,8 @@ exports.infos = (req, res, next) => {
 				email: doc.email,
 				username: doc.username,
 				imageUrl: doc.imageUrl,
+				friends: doc.friends,
+				pending: doc.pending,
 			});
 		})
 		.catch((err) => {
@@ -112,6 +116,8 @@ exports.getUser = (req, res, next) => {
 				_id: doc._id,
 				username: doc.username,
 				imageUrl: doc.imageUrl,
+				friends: doc.friends,
+				pending: doc.pending,
 			});
 		})
 		.catch((err) => {

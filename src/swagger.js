@@ -19,6 +19,9 @@ const doc = {
 			RoomType: {
 				"@enum": ["game", "collab"],
 			},
+			RoomVisibility: {
+				"@enum": ["public", "friends", "private"],
+			},
 		},
 	},
 	definitions: {
@@ -29,6 +32,8 @@ const doc = {
 			status: { $ref: "#/components/schemas/RoomStatus" },
 			maxPlayers: 0,
 			type: { $ref: "#/components/schemas/RoomType" },
+			visibility: { $ref: "#/components/schemas/RoomVisibility" },
+			password: null,
 			redirectionId: null,
 		},
 		User: {

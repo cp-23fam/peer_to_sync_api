@@ -30,6 +30,15 @@ const roomSchema = new Schema({
 		required: true,
 		enum: ["game", "collab"],
 	},
+	visibility: {
+		type: String,
+		required: true,
+		enum: ["public", "friends", "private"],
+	},
+	password: {
+		type: String,
+		required: false,
+	},
 	redirectionId: {
 		type: String,
 		required: false,

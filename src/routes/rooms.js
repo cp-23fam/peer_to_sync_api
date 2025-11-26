@@ -45,9 +45,12 @@ router.post("/", auth.logged, (req, res) => {
 		name: req.body.name,
 		hostId: req.body.hostId,
 		users: [req.body.hostId],
-		status: "waiting",
+		status: req.body.status,
 		maxPlayers: Number(req.body.maxPlayers),
+		visibility: req.body.visibility,
+		password: req.body.password,
 		type: req.body.type,
+		redirectionId: req.body.redirectionId,
 	});
 
 	room.save()

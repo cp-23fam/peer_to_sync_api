@@ -56,10 +56,22 @@
                   "hostId": {
                     "example": "any"
                   },
+                  "status": {
+                    "example": "any"
+                  },
                   "maxPlayers": {
                     "example": "any"
                   },
+                  "visibility": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  },
                   "type": {
+                    "example": "any"
+                  },
+                  "redirectionId": {
                     "example": "any"
                   }
                 }
@@ -433,6 +445,14 @@
           "collab"
         ]
       },
+      "RoomVisibility": {
+        "type": "string",
+        "enum": [
+          "public",
+          "friends",
+          "private"
+        ]
+      },
       "Room": {
         "type": "object",
         "properties": {
@@ -459,6 +479,10 @@
           "type": {
             "$ref": "#/components/schemas/RoomType"
           },
+          "visibility": {
+            "$ref": "#/components/schemas/RoomVisibility"
+          },
+          "password": {},
           "redirectionId": {}
         }
       },
