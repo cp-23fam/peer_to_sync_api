@@ -336,10 +336,41 @@
         "tags": [
           "Users"
         ],
-        "description": "Get current user infos",
+        "description": "Fetch user by id",
         "parameters": [
           {
             "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/user/email/{email}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Fetch user by email",
+        "parameters": [
+          {
+            "name": "email",
             "in": "path",
             "required": true,
             "schema": {
@@ -427,6 +458,164 @@
           }
         }
       }
+    },
+    "/user/friends/list": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get formated list of user friends",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/user/pending/list": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get formated list of user pending requests",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/user/friends/add": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Add a friend by email",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/friends/{id}/remove": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Remove a friend by uid",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/user/friends/{id}/accept": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Accept a pending request",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/user/friends/{id}/reject": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Reject a pending request",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -501,6 +690,16 @@
             "type": "string",
             "example": ""
           },
+          "friends": {
+            "type": "array",
+            "example": [],
+            "items": {}
+          },
+          "pending": {
+            "type": "array",
+            "example": [],
+            "items": {}
+          },
           "imageUrl": {}
         }
       },
@@ -520,9 +719,8 @@
     },
     "securitySchemes": {
       "userToken": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "Authorization"
+        "type": "http",
+        "scheme": "bearer"
       }
     }
   }

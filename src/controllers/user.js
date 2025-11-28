@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const { ObjectId } = require("mongoose").Types;
 
 exports.signup = (req, res, next) => {
 	const errors = validationResult(req);
@@ -33,12 +34,11 @@ exports.signup = (req, res, next) => {
 		})
 		.then((result) => {
 			res.status(201).json({
-				message: "User created successfully",
-				user: {
-					email: result.email,
-					username: result.username,
-					uid: result._id,
-				},
+				_id: result._id,
+				email: result.email,
+				username: result.username,
+				friends: result.friends,
+				pending: result.pending,
 			});
 		})
 		.catch((err) => {
@@ -123,4 +123,112 @@ exports.getUser = (req, res, next) => {
 		.catch((err) => {
 			res.status(500).json(err);
 		});
+};
+
+exports.getUserByMail = (req, res, next) => {
+	console.log(req.params);
+	User.findOne({ email: req.params.email })
+		.then((doc) =>
+			res.status(200).json({
+				_id: doc._id,
+				username: doc.username,
+				imageUrl: doc.imageUrl,
+				friends: doc.friends,
+				pending: doc.pending,
+			}),
+		)
+		.catch((err) => {
+			res.status(500).json(err);
+		});
+};
+
+exports.friendsList = async (req, res, next) => {
+	const user = await User.findOne({ _id: new ObjectId(req.uid) }).catch(
+		(err) => {
+			console.log(err);
+			res.status(500).json({ error: "Error getting user" });
+		},
+	);
+
+	const friends = [];
+
+	for (const f of user.friends) {
+		const friend = await User.findOne({ _id: new ObjectId(f) });
+
+		friends.push({
+			_id: friend._id,
+			username: friend.username,
+			imageUrl: friend.imageUrl,
+		});
+	}
+
+	res.status(200).json(friends);
+};
+
+exports.pendingList = async (req, res, next) => {
+	const user = await User.findOne({ _id: new ObjectId(req.uid) }).catch(
+		(err) => {
+			console.log(err);
+			res.status(500).json({ error: "Error getting user" });
+		},
+	);
+
+	const friends = [];
+
+	for (const f of user.pending) {
+		const pending = await User.findOne({ _id: new ObjectId(f) });
+
+		friends.push({
+			_id: pending._id,
+			username: pending.username,
+			imageUrl: pending.imageUrl,
+		});
+	}
+
+	res.status(200).json(friends);
+};
+
+exports.addFriend = async (req, res, next) => {
+	const user = await User.findOne({ email: req.body.email });
+
+	const result = await User.updateOne(
+		{ _id: user._id },
+		{ $addToSet: { pending: req.uid } },
+	);
+
+	res.status(200).json(result);
+};
+
+exports.removeFriend = (req, res, next) => {
+	User.updateOne(
+		{ _id: new ObjectId(req.uid) },
+		{
+			$pull: { friends: req.params.id },
+		},
+	).then((result) => {
+		res.status(200).json(result);
+	});
+};
+
+exports.acceptFriend = (req, res, next) => {
+	User.updateOne(
+		{ _id: new ObjectId(req.uid) },
+		{
+			$addToSet: { friends: req.params.id },
+			$pull: { pending: req.params.id },
+		},
+	).then((result) => {
+		res.status(200).json(result);
+	});
+};
+
+exports.rejectFriend = (req, res, next) => {
+	User.updateOne(
+		{ _id: new ObjectId(req.uid) },
+		{
+			$pull: { pending: req.params.id },
+		},
+	).then((result) => {
+		res.status(200).json(result);
+	});
 };

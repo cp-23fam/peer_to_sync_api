@@ -6,9 +6,8 @@ const endpointsFiles = ["./index.js"];
 const doc = {
 	securityDefinitions: {
 		userToken: {
-			type: "apiKey",
-			in: "header",
-			name: "Authorization",
+			type: "http",
+			scheme: "bearer",
 		},
 	},
 	components: {
@@ -40,6 +39,8 @@ const doc = {
 			email: "",
 			username: "",
 			password: "",
+			friends: [],
+			pending: [],
 			imageUrl: null,
 		},
 		Login: {

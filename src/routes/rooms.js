@@ -1,5 +1,5 @@
 const express = require("express");
-const { ObjectId, Types } = require("mongoose").Types;
+const { ObjectId } = require("mongoose").Types;
 const router = express.Router();
 
 const Room = require("../models/room");
