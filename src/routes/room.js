@@ -90,23 +90,21 @@ router.delete(
 	controller.delete,
 );
 
-router.patch(
-	"/:id",
-
-	// #swagger.tags = ['Rooms']
-	// #swagger.description = 'Replace a room by id'
-	// #swagger.security = [{"userToken": []}]
-
-	auth.logged,
-	auth.isHost,
-	controller.patch,
-);
-
 router.put(
 	"/:id",
 
 	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Replace a room by id'
+	/* #swagger.requestBody = {
+		required: true,
+		content: {
+			"application/json": {
+				schema: {
+					$ref: "#/components/schemas/Room"
+				}
+			}
+		}
+	} */
 	// #swagger.security = [{"userToken": []}]
 
 	auth.logged,

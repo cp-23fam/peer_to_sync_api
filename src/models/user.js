@@ -16,7 +16,7 @@ const userSchema = new Schema({
 	},
 	imageUrl: {
 		type: String,
-		required: false,
+		required: true,
 	},
 	friends: {
 		type: [String],

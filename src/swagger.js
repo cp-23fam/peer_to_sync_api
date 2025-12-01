@@ -47,11 +47,17 @@ const doc = {
 			email: "",
 			password: "",
 		},
-		// 	LockerCondition: {
-		// 		condition: false,
-		// 		comments: null,
-		// 		problems: null,
-		// 	},
+		SyncedRoom: {
+			started: false,
+			users: [],
+			objects: [],
+			status: "any",
+			userNotifyList: [],
+		},
+		NewSyncedRoom: {
+			status: "",
+			users: [],
+		},
 	},
 };
 

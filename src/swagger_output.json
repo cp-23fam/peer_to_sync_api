@@ -135,35 +135,6 @@
           }
         ]
       },
-      "patch": {
-        "tags": [
-          "Rooms"
-        ],
-        "description": "Replace a room by id",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "security": [
-          {
-            "userToken": []
-          }
-        ]
-      },
       "put": {
         "tags": [
           "Rooms"
@@ -191,7 +162,17 @@
           {
             "userToken": []
           }
-        ]
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Room"
+              }
+            }
+          }
+        }
       }
     },
     "/rooms/{id}/join": {
@@ -627,6 +608,165 @@
           }
         ]
       }
+    },
+    "/synced/{id}": {
+      "get": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Fetch a synced room",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/synced/{id}/changes": {
+      "put": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Create a synced room",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SyncedRoom"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/synced/": {
+      "post": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Create a synced room",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewSyncedRoom"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/synced/{id}/start": {
+      "post": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Start a synced room",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/synced/{id}/notified": {
+      "post": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Tell the server you\\'re notified",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -724,6 +864,48 @@
           "password": {
             "type": "string",
             "example": ""
+          }
+        }
+      },
+      "SyncedRoom": {
+        "type": "object",
+        "properties": {
+          "started": {
+            "type": "boolean",
+            "example": false
+          },
+          "users": {
+            "type": "array",
+            "example": [],
+            "items": {}
+          },
+          "objects": {
+            "type": "array",
+            "example": [],
+            "items": {}
+          },
+          "status": {
+            "type": "string",
+            "example": "any"
+          },
+          "userNotifyList": {
+            "type": "array",
+            "example": [],
+            "items": {}
+          }
+        }
+      },
+      "NewSyncedRoom": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": ""
+          },
+          "users": {
+            "type": "array",
+            "example": [],
+            "items": {}
           }
         }
       }

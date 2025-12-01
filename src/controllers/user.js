@@ -16,7 +16,7 @@ exports.signup = (req, res, next) => {
 	const email = req.body.email;
 	const username = req.body.username;
 	const password = req.body.password;
-	const imageUrl = req.body.imageUrl;
+	const imageUrl = `https://api.dicebear.com/9.x/shapes/png?seed=${email}`;
 
 	bcrypt
 		.hash(password, 12)
@@ -37,6 +37,7 @@ exports.signup = (req, res, next) => {
 				_id: result._id,
 				email: result.email,
 				username: result.username,
+				imageUrl: result.imageUrl,
 				friends: result.friends,
 				pending: result.pending,
 			});

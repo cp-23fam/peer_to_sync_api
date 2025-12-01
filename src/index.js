@@ -8,10 +8,9 @@ const swagger = require("swagger-ui-express");
 const mongoose = require("mongoose");
 
 const swaggerOutput = require("./swagger_output.json");
-const rooms = require("./routes/rooms");
+const rooms = require("./routes/room");
 const user = require("./routes/user");
-
-const { connectToDb } = require("./db");
+const synced = require("./routes/synced");
 
 const app = express();
 app.use(bodyParser.json());
@@ -29,6 +28,7 @@ app.use(express.json());
 
 app.use("/rooms", rooms);
 app.use("/user", user);
+app.use("/synced", synced);
 app.use("/doc", swagger.serve, swagger.setup(swaggerOutput));
 
 // @ts-ignore
