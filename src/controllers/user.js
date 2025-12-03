@@ -108,6 +108,8 @@ exports.list = (req, res, next) => {
 						email: u.email,
 						username: u.username,
 						imageUrl: u.imageUrl,
+						pending: [],
+						friends: [],
 					};
 				}),
 			);
@@ -182,8 +184,11 @@ exports.friendsList = async (req, res, next) => {
 
 		friends.push({
 			_id: friend._id,
+			email: friends.email,
 			username: friend.username,
 			imageUrl: friend.imageUrl,
+			friends: friend.friends,
+			pending: [],
 		});
 	}
 
@@ -205,8 +210,11 @@ exports.pendingList = async (req, res, next) => {
 
 		friends.push({
 			_id: pending._id,
+			email: pending.email,
 			username: pending.username,
 			imageUrl: pending.imageUrl,
+			friends: pending.friends,
+			pending: [],
 		});
 	}
 

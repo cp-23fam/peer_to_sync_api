@@ -21,6 +21,12 @@ const doc = {
 			RoomVisibility: {
 				"@enum": ["public", "friends", "private"],
 			},
+			Object: {
+				object: "any",
+			},
+			Status: {
+				status: "any",
+			},
 		},
 	},
 	definitions: {
@@ -57,9 +63,6 @@ const doc = {
 		NewSyncedRoom: {
 			status: "",
 			users: [],
-		},
-		Object: {
-			object: "any",
 		},
 	},
 };

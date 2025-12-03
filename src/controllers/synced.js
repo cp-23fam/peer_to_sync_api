@@ -101,7 +101,7 @@ exports.removeAt = async (req, res, next) => {
 exports.changeStatus = (req, res, next) => {
 	SyncedRoom.updateOne(
 		{ _id: new ObjectId(req.params.id) },
-		{ status: req.params.status },
+		{ status: req.body.status },
 	)
 		.then((result) => {
 			res.status(200).json(result);

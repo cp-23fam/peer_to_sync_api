@@ -57,7 +57,7 @@ router.post(
 	controller.post,
 );
 
-router.post(
+router.patch(
 	// #swagger.tags = ['Synced']
 	// #swagger.description = 'Start a synced room'
 	// #swagger.security = [{"userToken": []}]
@@ -69,7 +69,7 @@ router.post(
 	controller.start,
 );
 
-router.post(
+router.patch(
 	// #swagger.tags = ['Synced']
 	// #swagger.description = 'Tell the server you\'re notified'
 	// #swagger.security = [{"userToken": []}]
@@ -97,6 +97,15 @@ router.post(
 	// #swagger.tags = ['Synced']
 	// #swagger.description = 'Send an update request to all users'
 	// #swagger.security = [{"userToken": []}]
+
+	/* #swagger.requestBody = {
+        required: true,
+        content: {
+            "application/json": {
+                schema: { $ref: "#/components/schemas/Object" }
+            }
+        }
+    } */
 
 	"/:id/add",
 
@@ -128,8 +137,17 @@ router.post(
 
 router.post(
 	// #swagger.tags = ['Synced']
-	// #swagger.description = 'Send an update request to all users'
+	// #swagger.description = 'Update the status of the synced room'
 	// #swagger.security = [{"userToken": []}]
+
+	/* #swagger.requestBody = {
+        required: true,
+        content: {
+            "application/json": {
+                schema: { $ref: "#/components/schemas/Status" }
+            }
+        }
+    } */
 
 	"/:id/status",
 

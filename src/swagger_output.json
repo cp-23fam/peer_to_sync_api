@@ -310,13 +310,6 @@
         "description": "Get user list",
         "parameters": [
           {
-            "name": "max",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "maxUsers",
             "in": "query",
             "required": false,
@@ -753,7 +746,7 @@
       }
     },
     "/synced/{id}/start": {
-      "post": {
+      "patch": {
         "tags": [
           "Synced"
         ],
@@ -784,7 +777,7 @@
       }
     },
     "/synced/{id}/notified": {
-      "post": {
+      "patch": {
         "tags": [
           "Synced"
         ],
@@ -873,7 +866,17 @@
           {
             "userToken": []
           }
-        ]
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Object"
+              }
+            }
+          }
+        }
       }
     },
     "/synced/{id}/remove/{index}": {
@@ -933,7 +936,7 @@
         "tags": [
           "Synced"
         ],
-        "description": "Send an update request to all users",
+        "description": "Update the status of the synced room",
         "parameters": [
           {
             "name": "id",
@@ -956,7 +959,17 @@
           {
             "userToken": []
           }
-        ]
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Status"
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -983,6 +996,24 @@
           "friends",
           "private"
         ]
+      },
+      "Object": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "example": "any"
+          }
+        }
+      },
+      "Status": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "any"
+          }
+        }
       },
       "Room": {
         "type": "object",
@@ -1097,15 +1128,6 @@
             "type": "array",
             "example": [],
             "items": {}
-          }
-        }
-      },
-      "Object": {
-        "type": "object",
-        "properties": {
-          "object": {
-            "type": "string",
-            "example": "any"
           }
         }
       }
