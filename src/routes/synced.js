@@ -93,4 +93,49 @@ router.post(
 	controller.notifyUsers,
 );
 
+router.post(
+	// #swagger.tags = ['Synced']
+	// #swagger.description = 'Send an update request to all users'
+	// #swagger.security = [{"userToken": []}]
+
+	"/:id/add",
+
+	auth.logged,
+	auth.isInSynced,
+	controller.addThis,
+);
+
+router.post(
+	// #swagger.tags = ['Synced']
+	// #swagger.description = 'Send an update request to all users'
+	// #swagger.security = [{"userToken": []}]
+
+	/* #swagger.requestBody = {
+        required: true,
+        content: {
+            "application/json": {
+                schema: { $ref: "#/components/schemas/Object" }
+            }
+        }
+    } */
+
+	"/:id/remove/:index",
+
+	auth.logged,
+	auth.isInSynced,
+	controller.removeAt,
+);
+
+router.post(
+	// #swagger.tags = ['Synced']
+	// #swagger.description = 'Send an update request to all users'
+	// #swagger.security = [{"userToken": []}]
+
+	"/:id/status",
+
+	auth.logged,
+	auth.isInSynced,
+	controller.changeStatus,
+);
+
 module.exports = router;

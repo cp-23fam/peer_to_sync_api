@@ -59,6 +59,7 @@ router.post(
 	// #swagger.security = [{"userToken": []}]
 
 	auth.logged,
+	auth.isInRoom,
 	controller.quit,
 );
 

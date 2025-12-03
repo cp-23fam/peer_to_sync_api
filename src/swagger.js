@@ -58,6 +58,9 @@ const doc = {
 			status: "",
 			users: [],
 		},
+		Object: {
+			object: "any",
+		},
 	},
 };
 

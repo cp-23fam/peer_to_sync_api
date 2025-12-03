@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.use("/rooms", rooms);
-app.use("/user", user);
+app.use("/users", user);
 app.use("/synced", synced);
 app.use("/doc", swagger.serve, swagger.setup(swaggerOutput));
 

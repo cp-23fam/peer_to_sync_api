@@ -93,6 +93,30 @@ exports.login = (req, res, next) => {
 		});
 };
 
+exports.list = (req, res, next) => {
+	const maxUsers = req.query.maxUsers ?? 30;
+	const page = req.query.page ?? 0;
+
+	User.find()
+		.limit(maxUsers)
+		.skip(page * maxUsers)
+		.then((result) => {
+			res.status(200).json(
+				result.map((u) => {
+					return {
+						_id: u._id,
+						email: u.email,
+						username: u.username,
+						imageUrl: u.imageUrl,
+					};
+				}),
+			);
+		})
+		.catch((err) => {
+			res.status(500).json(err);
+		});
+};
+
 exports.infos = (req, res, next) => {
 	User.findOne({ _id: req.uid })
 		.then((doc) => {

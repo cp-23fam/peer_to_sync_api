@@ -8,10 +8,34 @@ const auth = require("../middleware/auth");
 
 router.get(
 	// #swagger.tags = ['Users']
+	// #swagger.description = 'Get user list'
+
+	// #swagger.security = [{"userToken": []}]
+
+	/* #swagger.parameters['maxUsers'] = {
+		in: 'query',
+		required: false,
+		type: 'number'
+	} */
+
+	/* #swagger.parameters['page'] = {
+		in: 'query',
+		required: false,
+		type: 'number'
+	} */
+
+	"/",
+
+	auth.logged,
+	userController.list,
+);
+
+router.get(
+	// #swagger.tags = ['Users']
 	// #swagger.description = 'Get current user infos'
 
 	// #swagger.security = [{"userToken": []}]
-	"/",
+	"/self",
 	auth.logged,
 	userController.infos,
 );

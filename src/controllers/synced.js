@@ -55,22 +55,80 @@ exports.notified = (req, res, next) => {
 	SyncedRoom.updateOne(
 		{ _id: new ObjectId(req.params.id) },
 		{ $pull: { userNotifyList: req.uid } },
-	);
+	)
+		.then((result) => {
+			res.status(200).json(result);
+		})
+		.catch((err) => {
+			res.status(500).json(err);
+		});
 };
 
-exports.addThis = (req, res, next) => {};
+exports.addThis = (req, res, next) => {
+	SyncedRoom.updateOne(
+		{ _id: new ObjectId(req.params.id) },
+		{ $push: { objects: req.params.object } },
+	)
+		.then((result) => {
+			res.status(200).json(result);
+		})
+		.catch((err) => {
+			res.status(500).json(err);
+		});
+};
 
-exports.changeStatus = (req, res, next) => {};
+exports.removeAt = async (req, res, next) => {
+	const synced = await SyncedRoom.findOne({
+		_id: new ObjectId(req.params.id),
+	});
+
+	if (synced.objects.length > 0) {
+		if (synced.objects[req.params.index] == req.body.object) {
+			SyncedRoom.updateOne(
+				{ _id: new ObjectId(req.params.id) },
+				{ $pull: { objects: synced.objects[req.params.index] } },
+			).then((result) => {
+				res.status(200).json(result);
+			});
+		} else {
+			res.sendStatus(409);
+		}
+	} else {
+		res.sendStatus(202);
+	}
+};
+
+exports.changeStatus = (req, res, next) => {
+	SyncedRoom.updateOne(
+		{ _id: new ObjectId(req.params.id) },
+		{ status: req.params.status },
+	)
+		.then((result) => {
+			res.status(200).json(result);
+		})
+		.catch((err) => {
+			res.status(500).json(err);
+		});
+};
 
 exports.notifyUsers = async (req, res, next) => {
 	const synced = await SyncedRoom.findOne({
 		_id: new ObjectId(req.params.id),
 	});
 
+	const userIndex = synced.users.indexOf(req.uid);
+	synced.users = synced.users.splice(userIndex, 1);
+
 	SyncedRoom.updateOne(
 		{ _id: new ObjectId(req.params.id) },
 		{ $addToSet: { userNotifyList: [...synced.users] } },
-	);
+	)
+		.then((result) => {
+			res.status(200).json(result);
+		})
+		.catch((err) => {
+			res.status(500).json(err);
+		});
 };
 
 exports.getChanges = async (req, res, next) => {

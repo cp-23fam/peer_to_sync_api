@@ -302,7 +302,53 @@
         ]
       }
     },
-    "/user/": {
+    "/users/": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get user list",
+        "parameters": [
+          {
+            "name": "max",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "maxUsers",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/users/self": {
       "get": {
         "tags": [
           "Users"
@@ -323,7 +369,7 @@
         ]
       }
     },
-    "/user/{id}": {
+    "/users/{id}": {
       "get": {
         "tags": [
           "Users"
@@ -354,7 +400,7 @@
         ]
       }
     },
-    "/user/email/{email}": {
+    "/users/email/{email}": {
       "get": {
         "tags": [
           "Users"
@@ -385,7 +431,7 @@
         ]
       }
     },
-    "/user/login": {
+    "/users/login": {
       "post": {
         "tags": [
           "Users"
@@ -415,7 +461,7 @@
         }
       }
     },
-    "/user/signup": {
+    "/users/signup": {
       "post": {
         "tags": [
           "Users"
@@ -440,9 +486,6 @@
                   },
                   "password": {
                     "example": "any"
-                  },
-                  "imageUrl": {
-                    "example": "any"
                   }
                 }
               }
@@ -451,7 +494,7 @@
         }
       }
     },
-    "/user/friends/list": {
+    "/users/friends/list": {
       "get": {
         "tags": [
           "Users"
@@ -472,7 +515,7 @@
         ]
       }
     },
-    "/user/pending/list": {
+    "/users/pending/list": {
       "get": {
         "tags": [
           "Users"
@@ -493,7 +536,7 @@
         ]
       }
     },
-    "/user/friends/add": {
+    "/users/friends/add": {
       "post": {
         "tags": [
           "Users"
@@ -525,7 +568,7 @@
         }
       }
     },
-    "/user/friends/{id}/remove": {
+    "/users/friends/{id}/remove": {
       "post": {
         "tags": [
           "Users"
@@ -553,7 +596,7 @@
         ]
       }
     },
-    "/user/friends/{id}/accept": {
+    "/users/friends/{id}/accept": {
       "post": {
         "tags": [
           "Users"
@@ -581,7 +624,7 @@
         ]
       }
     },
-    "/user/friends/{id}/reject": {
+    "/users/friends/{id}/reject": {
       "post": {
         "tags": [
           "Users"
@@ -645,7 +688,7 @@
         "tags": [
           "Synced"
         ],
-        "description": "Create a synced room",
+        "description": "Get changes from local to remote state",
         "parameters": [
           {
             "name": "id",
@@ -757,8 +800,156 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/synced/{id}/notify": {
+      "post": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Send an update request to all users",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/synced/{id}/add": {
+      "post": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Send an update request to all users",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/synced/{id}/remove/{index}": {
+      "post": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Send an update request to all users",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "202": {
+            "description": "Accepted"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/synced/{id}/status": {
+      "post": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Send an update request to all users",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "security": [
@@ -906,6 +1097,15 @@
             "type": "array",
             "example": [],
             "items": {}
+          }
+        }
+      },
+      "Object": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "example": "any"
           }
         }
       }
