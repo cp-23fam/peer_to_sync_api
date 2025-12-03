@@ -18,16 +18,16 @@ router.get(
 		type: 'number'
 	} */
 
-	/* #swagger.parameters['page'] = {
+	/* #swagger.parameters['search'] = {
 		in: 'query',
 		required: false,
-		type: 'number'
+		type: 'string'
 	} */
 
 	"/",
 
 	auth.logged,
-	userController.list,
+	userController.searchFriendList,
 );
 
 router.get(

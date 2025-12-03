@@ -318,20 +318,17 @@
             }
           },
           {
-            "name": "page",
+            "name": "search",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "number"
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         },
         "security": [

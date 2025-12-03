@@ -93,30 +93,25 @@ exports.login = (req, res, next) => {
 		});
 };
 
-exports.list = (req, res, next) => {
-	const maxUsers = req.query.maxUsers ?? 30;
-	const page = req.query.page ?? 0;
+exports.searchFriendList = async (req, res, next) => {
+	const maxUsers = req.query.maxUsers ?? 15;
+	const searchQuery = req.query.search ?? "";
 
-	User.find()
-		.limit(maxUsers)
-		.skip(page * maxUsers)
-		.then((result) => {
-			res.status(200).json(
-				result.map((u) => {
-					return {
-						_id: u._id,
-						email: u.email,
-						username: u.username,
-						imageUrl: u.imageUrl,
-						pending: [],
-						friends: [],
-					};
-				}),
-			);
-		})
-		.catch((err) => {
-			res.status(500).json(err);
-		});
+	let users = [];
+
+	const match = await User.find({
+		$nor: [{ _id: new ObjectId(req.uid) }],
+		email: { $regex: searchQuery, $options: "i" },
+	}).limit(maxUsers);
+
+	const random = await User.find({ $nor: [{ _id: new ObjectId(req.uid) }] })
+		.where("_id")
+		.ne(new ObjectId(req.uid))
+		.limit(maxUsers);
+
+	users.push(...match);
+
+	res.status(200).json(users);
 };
 
 exports.infos = (req, res, next) => {
@@ -232,27 +227,41 @@ exports.addFriend = async (req, res, next) => {
 	res.status(200).json(result);
 };
 
-exports.removeFriend = (req, res, next) => {
-	User.updateOne(
+exports.removeFriend = async (req, res, next) => {
+	await User.updateOne(
 		{ _id: new ObjectId(req.uid) },
 		{
 			$pull: { friends: req.params.id },
 		},
-	).then((result) => {
-		res.status(200).json(result);
-	});
+	);
+
+	await User.updateOne(
+		{ _id: new ObjectId(req.params.id) },
+		{
+			$pull: { friends: req.uid },
+		},
+	);
+
+	res.sendStatus(200);
 };
 
-exports.acceptFriend = (req, res, next) => {
-	User.updateOne(
+exports.acceptFriend = async (req, res, next) => {
+	await User.updateOne(
 		{ _id: new ObjectId(req.uid) },
 		{
 			$addToSet: { friends: req.params.id },
 			$pull: { pending: req.params.id },
 		},
-	).then((result) => {
-		res.status(200).json(result);
-	});
+	);
+
+	await User.updateOne(
+		{ _id: new ObjectId(req.uid) },
+		{
+			$addToSet: { friends: req.uid },
+		},
+	);
+
+	res.sendStatus(200);
 };
 
 exports.rejectFriend = (req, res, next) => {
