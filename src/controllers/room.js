@@ -1,4 +1,5 @@
 const Room = require("../models/room");
+const User = require("../models/user");
 const { ObjectId } = require("mongoose").Types;
 
 exports.list = (req, res, next) => {
@@ -58,9 +59,22 @@ exports.join = async (req, res) => {
 			return;
 		}
 
-		if (room.password != "" && room.password != req.query.password) {
-			res.status(401).json({ error: "Wrong password" });
-			return;
+		if (room.visibility == "friends") {
+			const host = await User.findOne({ _id: new ObjectId(room.hostId) });
+
+			if (!host.friends.includes(req.uid)) {
+				res.status(403).json({
+					error: "You are not friend with the host",
+				});
+				return;
+			}
+		}
+
+		if (room.visibility == "private") {
+			if (room.password != "" && room.password != req.query.password) {
+				res.status(401).json({ error: "Wrong password" });
+				return;
+			}
 		}
 
 		const result = await Room.updateOne(

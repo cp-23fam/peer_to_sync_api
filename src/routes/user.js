@@ -36,6 +36,7 @@ router.get(
 
 	// #swagger.security = [{"userToken": []}]
 	"/self",
+
 	auth.logged,
 	userController.infos,
 );
@@ -46,6 +47,7 @@ router.get(
 
 	// #swagger.security = [{"userToken": []}]
 	"/:id",
+
 	auth.logged,
 	userController.getUser,
 );
