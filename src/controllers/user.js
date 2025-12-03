@@ -100,14 +100,9 @@ exports.searchFriendList = async (req, res, next) => {
 	let users = [];
 
 	const match = await User.find({
-		$nor: [{ _id: new ObjectId(req.uid) }],
+		$nor: [{ _id: new ObjectId(req.uid) }, { friends: { $in: req.uid } }],
 		email: { $regex: searchQuery, $options: "i" },
 	}).limit(maxUsers);
-
-	const random = await User.find({ $nor: [{ _id: new ObjectId(req.uid) }] })
-		.where("_id")
-		.ne(new ObjectId(req.uid))
-		.limit(maxUsers);
 
 	users.push(...match);
 
@@ -255,7 +250,7 @@ exports.acceptFriend = async (req, res, next) => {
 	);
 
 	await User.updateOne(
-		{ _id: new ObjectId(req.uid) },
+		{ _id: new ObjectId(req.params.id) },
 		{
 			$addToSet: { friends: req.uid },
 		},
