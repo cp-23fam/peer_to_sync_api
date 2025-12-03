@@ -58,7 +58,7 @@ exports.join = async (req, res) => {
 			return;
 		}
 
-		if (room.password != null && room.password != req.params.password) {
+		if (room.password != "" && room.password != req.query.password) {
 			res.status(401).json({ error: "Wrong password" });
 			return;
 		}
