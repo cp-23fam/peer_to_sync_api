@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const { ObjectId } = require("mongoose").Types;
-const fs = require("fs");
+const multer = require("multer");
 
 exports.signup = (req, res, next) => {
 	const errors = validationResult(req);
@@ -95,6 +95,8 @@ exports.login = (req, res, next) => {
 };
 
 exports.sendImage = (req, res, next) => {
+	console.log(req.file);
+
 	User.updateOne(
 		{ _id: new ObjectId(req.uid) },
 		{ imageUrl: `http://localhost:3000/images/${req.uid}.png` },

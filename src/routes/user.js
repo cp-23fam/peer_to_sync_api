@@ -5,7 +5,17 @@ const router = express.Router();
 const User = require("../models/user");
 const userController = require("../controllers/user");
 const auth = require("../middleware/auth");
-const file = require("../middleware/file");
+const multer = require("multer");
+const upload = multer({
+	storage: multer.diskStorage({
+		destination: function (req, file, callback) {
+			callback(null, "public/images");
+		},
+		filename: function (req, file, callback) {
+			callback(null, req.uid + ".png");
+		},
+	}),
+});
 
 router.get(
 	// #swagger.tags = ['Users']
@@ -115,7 +125,7 @@ router.post(
 
 	"/image",
 	auth.logged,
-	file.mutler.array("image"),
+	upload.single("image"),
 	userController.sendImage,
 );
 
