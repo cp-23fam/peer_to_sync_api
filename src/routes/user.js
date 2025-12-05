@@ -129,6 +129,17 @@ router.post(
 	userController.sendImage,
 );
 
+router.post(
+	// #swagger.tags = ['Users']
+	// #swagger.description = 'Send profile picture of user'
+
+	// #swagger.security = [{"userToken": []}]
+
+	"/image/reset",
+	auth.logged,
+	userController.resetImage,
+);
+
 router.get(
 	// #swagger.tags = ['Users']
 	// #swagger.description = 'Get formated list of user friends'

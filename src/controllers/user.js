@@ -95,12 +95,22 @@ exports.login = (req, res, next) => {
 };
 
 exports.sendImage = (req, res, next) => {
-	console.log(req.file);
-
 	User.updateOne(
 		{ _id: new ObjectId(req.uid) },
 		{ imageUrl: `http://localhost:3000/images/${req.uid}.png` },
 	)
+		.then((result) => {
+			res.status(200).json(result);
+		})
+		.catch((err) => {
+			res.status(500).json(err);
+		});
+};
+
+exports.resetImage = async (req, res, next) => {
+	const user = await User.findOne({ _id: new ObjectId(req.uid) });
+	const imageUrl = `https://api.dicebear.com/9.x/shapes/png?seed=${user.email}`;
+	User.updateOne({ _id: new ObjectId(req.uid) }, { imageUrl: imageUrl })
 		.then((result) => {
 			res.status(200).json(result);
 		})

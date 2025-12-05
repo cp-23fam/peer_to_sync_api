@@ -493,6 +493,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "security": [
@@ -515,6 +518,27 @@
             }
           }
         }
+      }
+    },
+    "/users/image/reset": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Send profile picture of user",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
       }
     },
     "/users/friends/list": {
