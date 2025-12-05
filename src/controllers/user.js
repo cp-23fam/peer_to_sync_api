@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const { ObjectId } = require("mongoose").Types;
-const multer = require("multer");
 
 exports.signup = (req, res, next) => {
 	const errors = validationResult(req);
@@ -111,6 +110,24 @@ exports.resetImage = async (req, res, next) => {
 	const user = await User.findOne({ _id: new ObjectId(req.uid) });
 	const imageUrl = `https://api.dicebear.com/9.x/shapes/png?seed=${user.email}`;
 	User.updateOne({ _id: new ObjectId(req.uid) }, { imageUrl: imageUrl })
+		.then((result) => {
+			res.status(200).json(result);
+		})
+		.catch((err) => {
+			res.status(500).json(err);
+		});
+};
+
+exports.put = async (req, res, next) => {
+	const username = req.body.username;
+	const password = req.body.password;
+
+	const hashed = await bcrypt.hash(password, 12);
+
+	User.updateOne(
+		{ _id: new ObjectId(req.uid) },
+		{ username: username, password: hashed },
+	)
 		.then((result) => {
 			res.status(200).json(result);
 		})
