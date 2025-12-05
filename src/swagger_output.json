@@ -484,6 +484,39 @@
         }
       }
     },
+    "/users/image": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Send profile picture of user",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "file"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/friends/list": {
       "get": {
         "tags": [

@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const { ObjectId } = require("mongoose").Types;
+const fs = require("fs");
 
 exports.signup = (req, res, next) => {
 	const errors = validationResult(req);
@@ -93,6 +94,19 @@ exports.login = (req, res, next) => {
 		});
 };
 
+exports.sendImage = (req, res, next) => {
+	User.updateOne(
+		{ _id: new ObjectId(req.uid) },
+		{ imageUrl: `http://localhost:3000/images/${req.uid}.png` },
+	)
+		.then((result) => {
+			res.status(200).json(result);
+		})
+		.catch((err) => {
+			res.status(500).json(err);
+		});
+};
+
 exports.searchFriendList = async (req, res, next) => {
 	const maxUsers = req.query.maxUsers ?? 15;
 	const searchQuery = req.query.search ?? "";
@@ -100,7 +114,11 @@ exports.searchFriendList = async (req, res, next) => {
 	let users = [];
 
 	const match = await User.find({
-		$nor: [{ _id: new ObjectId(req.uid) }, { friends: { $in: req.uid } }],
+		$nor: [
+			{ _id: new ObjectId(req.uid) },
+			{ friends: { $in: req.uid } },
+			{ pending: { $in: req.uid } },
+		],
 		email: { $regex: searchQuery, $options: "i" },
 	}).limit(maxUsers);
 

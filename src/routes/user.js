@@ -5,6 +5,7 @@ const router = express.Router();
 const User = require("../models/user");
 const userController = require("../controllers/user");
 const auth = require("../middleware/auth");
+const file = require("../middleware/file");
 
 router.get(
 	// #swagger.tags = ['Users']
@@ -88,6 +89,34 @@ router.post(
 			.normalizeEmail(),
 	],
 	userController.signup,
+);
+
+router.post(
+	// #swagger.tags = ['Users']
+	// #swagger.description = 'Send profile picture of user'
+
+	// #swagger.security = [{"userToken": []}]
+
+	/* #swagger.requestBody = {
+        required: true,
+        content: {
+            "multipart/form-data": {
+				schema: {
+					type: "object",
+					properties: {
+						image: {
+							type: "file"
+						}
+					}
+				}
+			}
+        }
+    } */
+
+	"/image",
+	auth.logged,
+	file.mutler.array("image"),
+	userController.sendImage,
 );
 
 router.get(
