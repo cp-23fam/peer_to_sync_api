@@ -1218,6 +1218,10 @@
             "type": "array",
             "example": [],
             "items": {}
+          },
+          "type": {
+            "type": "string",
+            "example": ""
           }
         }
       }

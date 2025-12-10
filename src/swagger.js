@@ -63,6 +63,7 @@ const doc = {
 		NewSyncedRoom: {
 			status: "",
 			users: [],
+			type: "",
 		},
 	},
 };

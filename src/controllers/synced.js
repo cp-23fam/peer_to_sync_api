@@ -16,12 +16,15 @@ exports.get = (req, res, next) => {
 };
 
 exports.post = (req, res, next) => {
+	const now = new Date().getTime();
+	const expiration = now + 30 * 24 * 60 * 60 * 1000;
+
 	const syncedRoom = new SyncedRoom({
 		started: false,
 		users: req.body.users,
-		objects: [],
 		status: req.body.status,
-		userNotifyList: [],
+		expirationTimestamp: new Date(expiration).getTime(),
+		type: req.body.type,
 	});
 
 	syncedRoom

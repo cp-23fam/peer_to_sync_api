@@ -13,6 +13,7 @@ const syncedRoomSchema = new Schema({
 	objects: {
 		type: [],
 		required: true,
+		default: [],
 	},
 	status: {
 		type: Object,
@@ -20,6 +21,15 @@ const syncedRoomSchema = new Schema({
 	},
 	userNotifyList: {
 		type: [String],
+		required: true,
+		default: [],
+	},
+	expirationTimestamp: {
+		type: Date,
+		required: true,
+	},
+	type: {
+		type: String,
 		required: true,
 	},
 });
