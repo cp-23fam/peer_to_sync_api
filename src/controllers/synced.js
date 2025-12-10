@@ -70,7 +70,7 @@ exports.notified = (req, res, next) => {
 exports.addThis = (req, res, next) => {
 	SyncedRoom.updateOne(
 		{ _id: new ObjectId(req.params.id) },
-		{ $push: { objects: req.params.object } },
+		{ $push: { objects: req.body.object } },
 	)
 		.then((result) => {
 			res.status(200).json(result);
