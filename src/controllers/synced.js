@@ -80,13 +80,36 @@ exports.addThis = (req, res, next) => {
 		});
 };
 
+exports.editAt = async (req, res, next) => {
+	const synced = await SyncedRoom.findOne({
+		_id: new ObjectId(req.params.id),
+	});
+
+	if (synced.objects.length > 0) {
+		if (synced.objects.length == req.query.length) {
+			synced.objects[req.params.index] = req.body.object;
+
+			SyncedRoom.updateOne(
+				{ _id: new ObjectId(req.params.id) },
+				{ objects: synced.objects },
+			).then((result) => {
+				res.status(200).json(result);
+			});
+		} else {
+			res.sendStatus(409);
+		}
+	} else {
+		res.sendStatus(202);
+	}
+};
+
 exports.removeAt = async (req, res, next) => {
 	const synced = await SyncedRoom.findOne({
 		_id: new ObjectId(req.params.id),
 	});
 
 	if (synced.objects.length > 0) {
-		if (synced.objects[req.params.index] == req.body.object) {
+		if (synced.objects.length == req.query.length) {
 			SyncedRoom.updateOne(
 				{ _id: new ObjectId(req.params.id) },
 				{ $pull: { objects: synced.objects[req.params.index] } },
