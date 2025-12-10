@@ -25,7 +25,7 @@ const syncedRoomSchema = new Schema({
 		default: [],
 	},
 	expirationTimestamp: {
-		type: Date,
+		type: Number,
 		required: true,
 	},
 	type: {
