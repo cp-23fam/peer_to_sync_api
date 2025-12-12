@@ -128,6 +128,18 @@ router.post(
         }
     } */
 
+	"/:id/edit",
+
+	auth.logged,
+	auth.isInSynced,
+	controller.editAt,
+);
+
+router.post(
+	// #swagger.tags = ['Synced']
+	// #swagger.description = 'Send an update request to all users'
+	// #swagger.security = [{"userToken": []}]
+
 	"/:id/remove/:index",
 
 	auth.logged,

@@ -969,7 +969,7 @@
         }
       }
     },
-    "/synced/{id}/remove/{index}": {
+    "/synced/{id}/edit": {
       "post": {
         "tags": [
           "Synced"
@@ -985,9 +985,8 @@
             }
           },
           {
-            "name": "index",
-            "in": "path",
-            "required": true,
+            "name": "length",
+            "in": "query",
             "schema": {
               "type": "string"
             }
@@ -1019,6 +1018,55 @@
             }
           }
         }
+      }
+    },
+    "/synced/{id}/remove/{index}": {
+      "post": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Send an update request to all users",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "length",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "202": {
+            "description": "Accepted"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
       }
     },
     "/synced/{id}/status": {

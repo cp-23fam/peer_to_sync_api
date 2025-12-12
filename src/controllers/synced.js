@@ -21,6 +21,7 @@ exports.post = (req, res, next) => {
 
 	const syncedRoom = new SyncedRoom({
 		started: false,
+		name: req.body.name,
 		users: req.body.users,
 		status: req.body.status,
 		expirationTimestamp: new Date(expiration).getTime(),

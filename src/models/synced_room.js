@@ -6,6 +6,10 @@ const syncedRoomSchema = new Schema({
 		type: Boolean,
 		required: true,
 	},
+	name: {
+		type: String,
+		required: true,
+	},
 	users: {
 		type: [String],
 		required: true,
