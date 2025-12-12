@@ -148,7 +148,7 @@ exports.delete = (req, res) => {
 exports.put = (req, res) => {
 	const updates = req.body;
 	if (ObjectId.isValid(req.params.id)) {
-		Room.replaceOne({ _id: new ObjectId(req.params.id) }, { $set: updates })
+		Room.updateOne({ _id: new ObjectId(req.params.id) }, { $set: updates })
 			.then((result) => {
 				res.status(200).json(result);
 			})
