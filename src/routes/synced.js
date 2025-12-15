@@ -128,7 +128,7 @@ router.post(
         }
     } */
 
-	"/:id/edit",
+	"/:id/edit/:index",
 
 	auth.logged,
 	auth.isInSynced,

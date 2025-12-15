@@ -28,7 +28,6 @@ const roomSchema = new Schema({
 	type: {
 		type: String,
 		required: true,
-		enum: ["game", "collab"],
 	},
 	visibility: {
 		type: String,

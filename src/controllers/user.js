@@ -190,7 +190,6 @@ exports.getUser = (req, res, next) => {
 };
 
 exports.getUserByMail = (req, res, next) => {
-	console.log(req.params);
 	User.findOne({ email: req.params.email })
 		.then((doc) =>
 			res.status(200).json({

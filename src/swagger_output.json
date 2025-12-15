@@ -969,7 +969,7 @@
         }
       }
     },
-    "/synced/{id}/edit": {
+    "/synced/{id}/edit/{index}": {
       "post": {
         "tags": [
           "Synced"
@@ -978,6 +978,14 @@
         "parameters": [
           {
             "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
             "in": "path",
             "required": true,
             "schema": {
