@@ -15,6 +15,17 @@ exports.get = (req, res, next) => {
 	}
 };
 
+exports.getCurrentUser = async (req, res, next) => {
+	const synced = await SyncedRoom.find(
+		{ users: { $in: req.uid } },
+		{ objects: 0 },
+	);
+
+	synced.forEach((d) => (d.objects = []));
+
+	res.status(200).json(synced);
+};
+
 exports.post = (req, res, next) => {
 	const now = new Date().getTime();
 	const expiration = now + 30 * 24 * 60 * 60 * 1000;

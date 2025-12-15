@@ -362,7 +362,7 @@
         "tags": [
           "Users"
         ],
-        "description": "Send profile picture of user",
+        "description": "Change current user informations",
         "responses": {
           "200": {
             "description": "OK"
@@ -561,7 +561,7 @@
         "tags": [
           "Users"
         ],
-        "description": "Send profile picture of user",
+        "description": "Reset profile picture of user",
         "responses": {
           "200": {
             "description": "OK"
@@ -656,7 +656,7 @@
         "tags": [
           "Users"
         ],
-        "description": "Remove a friend by uid",
+        "description": "Remove a friend by id",
         "parameters": [
           {
             "name": "id",
@@ -684,7 +684,7 @@
         "tags": [
           "Users"
         ],
-        "description": "Accept a pending request",
+        "description": "Accept a pending friend request",
         "parameters": [
           {
             "name": "id",
@@ -712,7 +712,7 @@
         "tags": [
           "Users"
         ],
-        "description": "Reject a pending request",
+        "description": "Reject a pending friend request",
         "parameters": [
           {
             "name": "id",
@@ -733,6 +733,53 @@
             "userToken": []
           }
         ]
+      }
+    },
+    "/synced/": {
+      "get": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Return list of synced where the current user is in",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Create a synced room",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewSyncedRoom"
+              }
+            }
+          }
+        }
       }
     },
     "/synced/{id}": {
@@ -804,37 +851,6 @@
         }
       }
     },
-    "/synced/": {
-      "post": {
-        "tags": [
-          "Synced"
-        ],
-        "description": "Create a synced room",
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "security": [
-          {
-            "userToken": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewSyncedRoom"
-              }
-            }
-          }
-        }
-      }
-    },
     "/synced/clean": {
       "delete": {
         "tags": [
@@ -886,7 +902,7 @@
         "tags": [
           "Synced"
         ],
-        "description": "Start a synced room",
+        "description": "Start a synced room and notify all users",
         "parameters": [
           {
             "name": "id",
@@ -979,7 +995,7 @@
         "tags": [
           "Synced"
         ],
-        "description": "Send an update request to all users",
+        "description": "Add an object to synced",
         "parameters": [
           {
             "name": "id",
@@ -1020,7 +1036,7 @@
         "tags": [
           "Synced"
         ],
-        "description": "Send an update request to all users",
+        "description": "Edit object at index in synced",
         "parameters": [
           {
             "name": "id",
@@ -1079,7 +1095,7 @@
         "tags": [
           "Synced"
         ],
-        "description": "Send an update request to all users",
+        "description": "Remove object at index in synced",
         "parameters": [
           {
             "name": "id",

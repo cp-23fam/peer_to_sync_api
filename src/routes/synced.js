@@ -6,6 +6,17 @@ const controller = require("../controllers/synced");
 
 router.get(
 	// #swagger.tags = ['Synced']
+	// #swagger.description = 'Return list of synced ids where the current user is in'
+	// #swagger.security = [{"userToken": []}]
+
+	"/",
+
+	auth.logged,
+	controller.getCurrentUser,
+);
+
+router.get(
+	// #swagger.tags = ['Synced']
 	// #swagger.description = 'Fetch a synced room'
 	// #swagger.security = [{"userToken": []}]
 
