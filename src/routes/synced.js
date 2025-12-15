@@ -81,7 +81,7 @@ router.patch(
 
 router.patch(
 	// #swagger.tags = ['Synced']
-	// #swagger.description = 'Start a synced room'
+	// #swagger.description = 'Start a synced room and notify all users'
 	// #swagger.security = [{"userToken": []}]
 
 	"/:id/start",
@@ -117,7 +117,7 @@ router.post(
 
 router.post(
 	// #swagger.tags = ['Synced']
-	// #swagger.description = 'Send an update request to all users'
+	// #swagger.description = 'Add an object to synced'
 	// #swagger.security = [{"userToken": []}]
 
 	/* #swagger.requestBody = {
@@ -138,7 +138,7 @@ router.post(
 
 router.post(
 	// #swagger.tags = ['Synced']
-	// #swagger.description = 'Send an update request to all users'
+	// #swagger.description = 'Edit object at index in synced'
 	// #swagger.security = [{"userToken": []}]
 
 	/* #swagger.requestBody = {
@@ -159,7 +159,7 @@ router.post(
 
 router.post(
 	// #swagger.tags = ['Synced']
-	// #swagger.description = 'Send an update request to all users'
+	// #swagger.description = 'Remove object at index in synced'
 	// #swagger.security = [{"userToken": []}]
 
 	"/:id/remove/:index",

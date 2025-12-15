@@ -131,7 +131,7 @@ router.post(
 
 router.post(
 	// #swagger.tags = ['Users']
-	// #swagger.description = 'Send profile picture of user'
+	// #swagger.description = 'Reset profile picture of user'
 
 	// #swagger.security = [{"userToken": []}]
 
@@ -142,7 +142,7 @@ router.post(
 
 router.put(
 	// #swagger.tags = ['Users']
-	// #swagger.description = 'Send profile picture of user'
+	// #swagger.description = 'Change current user informations'
 
 	// #swagger.security = [{"userToken": []}]
 
@@ -186,7 +186,7 @@ router.post(
 
 router.post(
 	// #swagger.tags = ['Users']
-	// #swagger.description = 'Remove a friend by uid'
+	// #swagger.description = 'Remove a friend by id'
 
 	// #swagger.security = [{"userToken": []}]
 
@@ -197,7 +197,7 @@ router.post(
 
 router.post(
 	// #swagger.tags = ['Users']
-	// #swagger.description = 'Accept a pending request'
+	// #swagger.description = 'Accept a pending friend request'
 
 	// #swagger.security = [{"userToken": []}]
 
@@ -208,7 +208,7 @@ router.post(
 
 router.post(
 	// #swagger.tags = ['Users']
-	// #swagger.description = 'Reject a pending request'
+	// #swagger.description = 'Reject a pending friend request'
 
 	// #swagger.security = [{"userToken": []}]
 
