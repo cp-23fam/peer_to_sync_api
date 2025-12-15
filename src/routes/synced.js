@@ -57,6 +57,28 @@ router.post(
 	controller.post,
 );
 
+router.delete(
+	// #swagger.tags = ['Synced']
+	// #swagger.description = 'Remove expired synced'
+	// #swagger.security = [{"userToken": []}]
+
+	"/clean",
+
+	controller.clean,
+);
+
+router.patch(
+	// #swagger.tags = ['Synced']
+	// #swagger.description = 'Set expiration timestamp 30 days after request'
+	// #swagger.security = [{"userToken": []}]
+
+	"/:id/renew",
+
+	auth.logged,
+	auth.isInSynced,
+	controller.renew,
+);
+
 router.patch(
 	// #swagger.tags = ['Synced']
 	// #swagger.description = 'Start a synced room'

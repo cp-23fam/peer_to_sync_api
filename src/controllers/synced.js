@@ -38,6 +38,28 @@ exports.post = (req, res, next) => {
 		});
 };
 
+exports.clean = async (req, res, next) => {
+	const date = new Date();
+
+	await SyncedRoom.deleteMany({
+		expirationTimestamp: { $lt: date.getTime() },
+	});
+
+	res.sendStatus(200);
+};
+
+exports.renew = async (req, res, next) => {
+	const now = new Date().getTime();
+	const expiration = now + 30 * 24 * 60 * 60 * 1000;
+
+	const result = await SyncedRoom.updateOne(
+		{ _id: new ObjectId(req.params.id) },
+		{ expirationTimestamp: expiration },
+	);
+
+	res.status(200).json(result);
+};
+
 exports.start = async (req, res, next) => {
 	const synced = await SyncedRoom.findOne({
 		_id: new ObjectId(req.params.id),

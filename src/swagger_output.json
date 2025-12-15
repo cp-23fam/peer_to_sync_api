@@ -835,6 +835,52 @@
         }
       }
     },
+    "/synced/clean": {
+      "delete": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Remove expired synced",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
+    "/synced/{id}/renew": {
+      "patch": {
+        "tags": [
+          "Synced"
+        ],
+        "description": "Set expiration timestamp 30 days after request",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "userToken": []
+          }
+        ]
+      }
+    },
     "/synced/{id}/start": {
       "patch": {
         "tags": [
