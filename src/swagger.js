@@ -61,6 +61,7 @@ const doc = {
 			userNotifyList: [],
 		},
 		NewSyncedRoom: {
+			name: "",
 			status: "",
 			users: [],
 			type: "",

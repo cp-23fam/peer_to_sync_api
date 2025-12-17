@@ -740,7 +740,7 @@
         "tags": [
           "Synced"
         ],
-        "description": "Return list of synced where the current user is in",
+        "description": "Return list of synced ids where the current user is in",
         "responses": {
           "200": {
             "description": "OK"
@@ -1328,6 +1328,10 @@
       "NewSyncedRoom": {
         "type": "object",
         "properties": {
+          "name": {
+            "type": "string",
+            "example": ""
+          },
           "status": {
             "type": "string",
             "example": ""
