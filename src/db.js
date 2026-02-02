@@ -1,6 +1,7 @@
 // @ts-check
 
 const { MongoClient } = require("mongodb");
+const { logger } = require("./utils/logger");
 
 /**
  * @type {import("mongodb").Db}
@@ -17,7 +18,7 @@ module.exports = {
 				return cb();
 			})
 			.catch((err) => {
-				console.log(err);
+				logger.error(err);
 				return cb(err);
 			});
 	},

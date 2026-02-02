@@ -237,8 +237,7 @@
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "description": "Room Id"
+            }
           }
         ],
         "responses": {

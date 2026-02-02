@@ -1,5 +1,6 @@
 const Room = require("../models/room");
 const User = require("../models/user");
+const { logger } = require("../utils/logger");
 const { ObjectId } = require("mongoose").Types;
 
 exports.list = (req, res, next) => {
@@ -81,7 +82,7 @@ exports.join = async (req, res) => {
 			{ _id: new ObjectId(req.params.id) },
 			{ $addToSet: { users: req.uid } },
 		).catch((err) => {
-			console.log(err);
+			logger.error(err);
 			res.status(500).json({ error: "User could not join room" });
 		});
 
@@ -101,7 +102,7 @@ exports.quit = (req, res) => {
 				res.status(200).json(result);
 			})
 			.catch((err) => {
-				console.log(err);
+				logger.error(err);
 				res.status(500).json({ error: "User could not quit room" });
 			});
 	} else {
@@ -119,7 +120,7 @@ exports.kick = (req, res) => {
 				res.status(200).json(result);
 			})
 			.catch((err) => {
-				console.log(err);
+				logger.error(err);
 				res.status(500).json({
 					error: "User could not get kicked from room",
 				});

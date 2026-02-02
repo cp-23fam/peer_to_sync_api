@@ -52,10 +52,6 @@ router.post(
 
 	// #swagger.tags = ['Rooms']
 	// #swagger.description = 'Make the User quit the referenced room'
-	/* #swagger.parameters['id'] = {
-		description: 'Room Id',
-		required: true
-	}	*/
 	// #swagger.security = [{"userToken": []}]
 
 	auth.logged,

@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const { logger } = require("../utils/logger");
 const { ObjectId } = require("mongoose").Types;
 
 exports.signup = (req, res, next) => {
@@ -208,7 +209,7 @@ exports.getUserByMail = (req, res, next) => {
 exports.friendsList = async (req, res, next) => {
 	const user = await User.findOne({ _id: new ObjectId(req.uid) }).catch(
 		(err) => {
-			console.log(err);
+			logger.error(err);
 			res.status(500).json({ error: "Error getting user" });
 		},
 	);
@@ -234,7 +235,7 @@ exports.friendsList = async (req, res, next) => {
 exports.pendingList = async (req, res, next) => {
 	const user = await User.findOne({ _id: new ObjectId(req.uid) }).catch(
 		(err) => {
-			console.log(err);
+			logger.error(err);
 			res.status(500).json({ error: "Error getting user" });
 		},
 	);

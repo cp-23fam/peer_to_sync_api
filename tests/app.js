@@ -1,19 +1,13 @@
-// @ts-check
-
 require("dotenv").config({ quiet: true });
-
-const { logger } = require("./utils/logger");
 
 const bodyParser = require("body-parser");
 const express = require("express");
-const path = require("path");
 const swagger = require("swagger-ui-express");
-const mongoose = require("mongoose");
 
-const swaggerOutput = require("./swagger_output.json");
-const rooms = require("./routes/room");
-const user = require("./routes/user");
-const synced = require("./routes/synced");
+const swaggerOutput = require("../src/swagger_output.json");
+const rooms = require("../src/routes/room");
+const user = require("../src/routes/user");
+const synced = require("../src/routes/synced");
 
 const app = express();
 app.use(bodyParser.json());
@@ -43,14 +37,4 @@ app.use((error, req, res, next) => {
 	res.status(status).json({ message: message, data: data });
 });
 
-mongoose
-	// @ts-ignore
-	.connect(process.env.CONNECTION_STRING)
-	.then((result) => {
-		app.listen(
-			3000,
-			() => logger.info("Listening on http://localhost:3000"),
-			// console.info("Listening on http://localhost:3000"),
-		);
-	})
-	.catch((err) => console.log(err));
+module.exports = app;
